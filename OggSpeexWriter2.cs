@@ -44,6 +44,8 @@ namespace NSpeex
          */
         private long granulepos;
 
+        private long packetDataSize = 0;
+
         private OggSpeexWriter2()
         {
             if (streamSerialNumber == 0)
@@ -154,11 +156,15 @@ namespace NSpeex
             LittleEndian.WriteInt(pageHeaderData, 22, chksum);
             stream.Write(pageHeaderData, 0, pageHeaderData.Length);
             stream.Write(dataBuffer, 0, dataBufferPtr);
-            //Console.WriteLine("write page header:" + pageHeaderData.Length);
-            //Console.WriteLine("dataBufferPtr:" + dataBufferPtr);
+            packetDataSize += dataBufferPtr;
+
             dataBufferPtr = 0;
             headerBufferPtr = 0;
             packetCount = 0;
+            if (eos)
+            {
+                Console.WriteLine("total write " + packetDataSize +" packet data int byte");
+            }
         }
 
     }
