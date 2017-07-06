@@ -4,3 +4,4 @@ Properties/**
 *.csproj
 *.sln
 *.suo
+*.user
