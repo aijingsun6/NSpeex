@@ -134,6 +134,11 @@ namespace NSpeex
             granulepos += nframes * (mode == BandMode.UltraWide ? 640 : (mode == BandMode.Wide ? 320 : 160));
         }
 
+        public void WritePackage(SpeexPacket  packet)
+        {
+            WritePackage(packet.Data, 0, packet.Size);
+        }
+
         public override void Open(string path)
         {
             stream = File.Create(path);

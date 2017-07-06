@@ -106,6 +106,7 @@ namespace NSpeex.Test
 
             SpeexEncoder speexEncoder = new SpeexEncoder(mode);
             int quality = 8;// modify your self
+            // TODO: set frame per package
             int framesPerPackage = 1;// one frame one package
             bool vbr = false;
            
@@ -123,10 +124,12 @@ namespace NSpeex.Test
             writer.WriteHeader("alking");
             int pcmPacketSize = 2 * nChannels * speexEncoder.FrameSize;
             int bytesCount = 0;
+            
             while (bytesCount < size)
             {
                 int read = framesPerPackage * pcmPacketSize;
                 fs.Read(tmp, 0, read);
+                SpeexPacket packet = new SpeexPacket(framesPerPackage);
                 for (int i = 0; i < framesPerPackage; i++)
                 {
 
@@ -137,9 +140,13 @@ namespace NSpeex.Test
                     if (encSize > 0)
                     {
                         // write a frme data
-                        writer.WritePackage(tmp, 0, encSize);
+                        //writer.WritePackage(tmp, 0, encSize); when frame per package = 1 works
+                        SpeexFrame frame = SpeexFrame.ParseFrom(tmp, 0, encSize);
+                        packet.AddFrame(frame);
+                       
                     }
                 }
+                writer.WritePackage(packet);
                 bytesCount += framesPerPackage * pcmPacketSize;
 
             }
