@@ -48,7 +48,7 @@ namespace NSpeex
         {
             if (streamSerialNumber == 0)
             {
-                streamSerialNumber = 100;
+                streamSerialNumber = new Random().Next();
             }
             dataBuffer = new byte[65565];
             dataBufferPtr = 0;
